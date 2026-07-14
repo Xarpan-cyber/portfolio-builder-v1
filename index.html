@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Builder</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <!-- ==================== NAVIGATION ==================== -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo" onclick="navigateTo('home')">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                </svg>
+                PortfolioBuilder
+            </div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#" onclick="navigateTo('home')" class="active" data-page="home"> Home</a></li>
+                <li><a href="#" onclick="navigateTo('builder')" data-page="builder"> Builder</a></li>
+                <li><a href="#" onclick="navigateTo('preview')" data-page="preview"> Preview</a></li>
+                <li><a href="#" onclick="navigateTo('themes')" data-page="themes"> Themes</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ==================== TOAST CONTAINER ==================== -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- ==================== MODAL ==================== -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <h3 id="modalTitle">Confirm Action</h3>
+            <p id="modalMessage">Are you sure?</p>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-danger" id="modalConfirmBtn" onclick="confirmModal()">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="app-container">
+
+        <!-- ==================== HOME PAGE ==================== -->
+        <div class="page active" id="page-home">
+            <div class="landing-hero">
+                <h1>Build Your Professional Portfolio</h1>
+                <p>Create a stunning portfolio website in minutes. Fill in your details, choose a theme, and share your
+                    portfolio with the world.</p>
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <button class="btn btn-primary" onclick="navigateTo('builder')"
+                        style="font-size: 1.1rem; padding: 14px 36px;">
+                        Start Building
+                    </button>
+                    <button class="btn btn-secondary" onclick="navigateTo('preview')"
+                        style="font-size: 1.1rem; padding: 14px 36px;">
+                        View Preview
+                    </button>
+                </div>
+
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">📝</div>
+                        <h3>Easy Form Builder</h3>
+                        <p>Fill in your personal details, education, skills, and projects through an intuitive
+                            step-by-step form.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🎨</div>
+                        <h3>Beautiful Themes</h3>
+                        <p>Choose from 8 stunning themes including light and dark modes to match your personal style.
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">💾</div>
+                        <h3>Auto Save</h3>
+                        <p>Your data is automatically saved to local storage. Never lose your progress even if you close
+                            the browser.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📱</div>
+                        <h3>Fully Responsive</h3>
+                        <p>Your portfolio looks great on all devices - desktops, tablets, and mobile phones.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">✅</div>
+                        <h3>Form Validation</h3>
+                        <p>Smart form validation ensures all required fields are properly filled before generating your
+                            portfolio.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🖨️</div>
+                        <h3>Print / Export</h3>
+                        <p>Print your portfolio or save it as a PDF with a single click. Share it anywhere you want.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== BUILDER PAGE ==================== -->
+        <div class="page" id="page-builder">
+            <div class="builder-layout">
+                <!-- Sidebar -->
+                <div class="form-sidebar">
+                    <div class="sidebar-title">📋 Portfolio Sections</div>
+                    <ul class="form-nav" id="formNav">
+                        <li class="active" onclick="showFormSection(0)">
+                            <span class="nav-icon">👤</span>
+                            <span>Personal</span>
+                            <span class="step-number">1</span>
+                        </li>
+                        <li onclick="showFormSection(1)">
+                            <span class="nav-icon">🎯</span>
+                            <span>Skills</span>
+                            <span class="step-number">2</span>
+                        </li>
+                        <li onclick="showFormSection(2)">
+                            <span class="nav-icon">🎓</span>
+                            <span>Education</span>
+                            <span class="step-number">3</span>
+                        </li>
+                        <li onclick="showFormSection(3)">
+                            <span class="nav-icon">💼</span>
+                            <span>Projects</span>
+                            <span class="step-number">4</span>
+                        </li>
+                        <li onclick="showFormSection(4)">
+                            <span class="nav-icon">📬</span>
+                            <span>Contact</span>
+                            <span class="step-number">5</span>
+                        </li>
+                    </ul>
+                    <div class="progress-container">
+                        <div class="progress-label">
+                            <span>Progress</span>
+                            <span id="progressPercent">0%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 1.5rem; display: flex; flex-direction: column; gap: 8px;">
+                        <button class="btn btn-success" onclick="generatePortfolio()"
+                            style="width: 100%; justify-content: center;">
+                            ✨ Generate Portfolio
+                        </button>
+                        <button class="btn btn-danger" onclick="showResetModal()"
+                            style="width: 100%; justify-content: center;">
+                            🗑️ Reset All
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Form Container -->
+                <div class="form-container">
+
+                    <!-- Section 1: Personal Details -->
+                    <div class="form-section active" id="section-0">
+                        <div class="form-section-title">👤 Personal Details</div>
+                        <p class="form-section-subtitle">Tell us about yourself. This information will appear in your
+                            portfolio header.</p>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>First Name <span class="required">*</span></label>
+                                <input type="text" id="firstName" placeholder="John"
+                                    oninput="validateField(this, 'text')">
+                                <span class="error-message" id="error-firstName">First name is required</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Last Name <span class="required">*</span></label>
+                                <input type="text" id="lastName" placeholder="Doe"
+                                    oninput="validateField(this, 'text')">
+                                <span class="error-message" id="error-lastName">Last name is required</span>
+                            </div>
+                            <div class="form-group full-width">
+                                <label>Professional Title <span class="required">*</span></label>
+                                <input type="text" id="title" placeholder="Full Stack Developer"
+                                    oninput="validateField(this, 'text')">
+                                <span class="error-message" id="error-title">Professional title is required</span>
+                            </div>
+                            <div class="form-group full-width">
+                                <label>Bio / About Me</label>
+                                <textarea id="bio"
+                                    placeholder="Write a brief introduction about yourself, your passion, and what you do..."
+                                    rows="4"></textarea>
+                            </div>
+                            <div class="form-group full-width">
+                                <label>Profile Photo</label>
+                                <div class="photo-upload-area" onclick="document.getElementById('photoInput').click()">
+                                    <img class="photo-preview" id="photoPreview" alt="Profile Photo">
+                                    <div id="uploadPlaceholder">
+                                        <div class="upload-icon">📷</div>
+                                        <p>Click to upload your photo</p>
+                                        <p style="font-size: 0.8rem; margin-top: 4px;">Recommended: 400x400px, JPG/PNG
+                                        </p>
+                                    </div>
+                                </div>
+                                <input type="file" id="photoInput" accept="image/*" style="display: none;"
+                                    onchange="handlePhotoUpload(event)">
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <div></div>
+                            <button class="btn btn-primary" onclick="nextSection()">Next: Skills →</button>
+                        </div>
+                    </div>
+
+                    <!-- Section 2: Skills -->
+                    <div class="form-section" id="section-1">
+                        <div class="form-section-title">🎯 Skills</div>
+                        <p class="form-section-subtitle">Add your technical and soft skills. Rate your proficiency level
+                            for each skill.</p>
+
+                        <div class="skills-container" id="skillsContainer"></div>
+
+                        <div class="skill-input-group">
+                            <input type="text" id="skillInput" placeholder="e.g., JavaScript, Python, Design..."
+                                onkeypress="if(event.key==='Enter')addSkill()">
+                            <select id="skillLevel">
+                                <option value="90">Expert</option>
+                                <option value="75" selected>Advanced</option>
+                                <option value="60">Intermediate</option>
+                                <option value="40">Beginner</option>
+                            </select>
+                            <button onclick="addSkill()">+ Add Skill</button>
+                        </div>
+
+                        <div style="margin-top: 1rem;">
+                            <p style="font-size: 0.85rem; color: var(--text-secondary);">💡 Tip: Add at least 5 skills
+                                to make your portfolio stand out!</p>
+                        </div>
+
+                        <div class="form-actions">
+                            <button class="btn btn-secondary" onclick="prevSection()">← Previous</button>
+                            <button class="btn btn-primary" onclick="nextSection()">Next: Education →</button>
+                        </div>
+                    </div>
+
+                    <!-- Section 3: Education -->
+                    <div class="form-section" id="section-2">
+                        <div class="form-section-title">🎓 Education</div>
+                        <p class="form-section-subtitle">Add your educational background. Include degrees,
+                            certifications, and relevant courses.</p>
+
+                        <div class="dynamic-list" id="educationList"></div>
+
+                        <button class="add-item-btn" onclick="addEducation()">
+                            ➕ Add Education
+                        </button>
+
+                        <div class="form-actions">
+                            <button class="btn btn-secondary" onclick="prevSection()">← Previous</button>
+                            <button class="btn btn-primary" onclick="nextSection()">Next: Projects →</button>
+                        </div>
+                    </div>
+
+                    <!-- Section 4: Projects -->
+                    <div class="form-section" id="section-3">
+                        <div class="form-section-title">💼 Projects</div>
+                        <p class="form-section-subtitle">Showcase your best work. Add projects with descriptions,
+                            technologies used, and links.</p>
+
+                        <div class="dynamic-list" id="projectsList"></div>
+
+                        <button class="add-item-btn" onclick="addProject()">
+                            ➕ Add Project
+                        </button>
+
+                        <div class="form-actions">
+                            <button class="btn btn-secondary" onclick="prevSection()">← Previous</button>
+                            <button class="btn btn-primary" onclick="nextSection()">Next: Contact →</button>
+                        </div>
+                    </div>
+
+                    <!-- Section 5: Contact -->
+                    <div class="form-section" id="section-4">
+                        <div class="form-section-title">📬 Contact Information</div>
+                        <p class="form-section-subtitle">How can people reach you? Add your contact details and social
+                            media links.</p>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Email <span class="required">*</span></label>
+                                <input type="email" id="email" placeholder="john@example.com"
+                                    oninput="validateField(this, 'email')">
+                                <span class="error-message" id="error-email">Please enter a valid email</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Phone</label>
+                                <input type="tel" id="phone" placeholder="+1 (555) 123-4567"
+                                    oninput="validateField(this, 'phone')">
+                                <span class="error-message" id="error-phone">Please enter a valid phone number</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Location</label>
+                                <input type="text" id="location" placeholder="New York, USA">
+                            </div>
+                            <div class="form-group">
+                                <label>Website</label>
+                                <input type="url" id="website" placeholder="https://yourwebsite.com"
+                                    oninput="validateField(this, 'url')">
+                                <span class="error-message" id="error-website">Please enter a valid URL</span>
+                            </div>
+                            <div class="form-group">
+                                <label>LinkedIn</label>
+                                <input type="url" id="linkedin" placeholder="https://linkedin.com/in/yourprofile">
+                            </div>
+                            <div class="form-group">
+                                <label>GitHub</label>
+                                <input type="url" id="github" placeholder="https://github.com/yourusername">
+                            </div>
+                            <div class="form-group">
+                                <label>Twitter / X</label>
+                                <input type="url" id="twitter" placeholder="https://twitter.com/yourusername">
+                            </div>
+                            <div class="form-group">
+                                <label>Instagram</label>
+                                <input type="url" id="instagram" placeholder="https://instagram.com/yourusername">
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button class="btn btn-secondary" onclick="prevSection()">← Previous</button>
+                            <button class="btn btn-success" onclick="generatePortfolio()"
+                                style="font-size: 1.05rem; padding: 14px 32px;">
+                                ✨ Generate Portfolio
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== PREVIEW PAGE ==================== -->
+        <div class="page" id="page-preview">
+            <div id="portfolioContent">
+                <div class="empty-state">
+                    <div class="empty-icon">📋</div>
+                    <h2>No Portfolio Yet</h2>
+                    <p>Start building your portfolio by filling in your details in the Builder section.</p>
+                    <button class="btn btn-primary" onclick="navigateTo('builder')">🛠️ Go to Builder</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== THEMES PAGE ==================== -->
+        <div class="page" id="page-themes">
+            <h2 class="themes-page-title">🎨 Choose Your Theme</h2>
+            <p class="themes-page-subtitle">Select a theme that matches your personal style. Changes apply instantly!
+            </p>
+
+            <div class="themes-grid">
+                <div class="theme-card active" onclick="setTheme('default')" data-theme-card="default">
+                    <div class="theme-preview">
+                        <div class="theme-preview-bar" style="background: linear-gradient(135deg, #2563eb, #7c3aed);">
+                        </div>
+                        <div class="theme-preview-content" style="background: #f8fafc;">
+                            <div class="theme-preview-sidebar" style="background: #e2e8f0;"></div>
+                            <div class="theme-preview-main" style="background: white;">
+                                <div class="theme-preview-line" style="background: #2563eb;"></div>
+                                <div class="theme-preview-line" style="background: #94a3b8;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <h3>Professional Blue</h3>
+                    <p>Clean and professional</p>
+                </div>
+
+                <div class="theme-card" onclick="setTheme('emerald')" data-theme-card="emerald">
+                    <div class="theme-preview">
+                        <div class="theme-preview-bar" style="background: linear-gradient(135deg, #059669, #0d9488);">
+                        </div>
+                        <div class="theme-preview-content" style="background: #f8fafc;">
+                            <div class="theme-preview-sidebar" style="background: #d1fae5;"></div>
+                            <div class="theme-preview-main" style="background: white;">
+                                <div class="theme-preview-line" style="background: #059669;"></div>
+                                <div class="theme-preview-line" style="background: #94a3b8;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <h3>Emerald Green</h3>
+                    <p>Fresh and natural</p>
+                </div>
+
+                <div class="theme-card" onclick="setTheme('sunset')" data-theme-card="sunset">
+                    <div class="theme-preview">
+                        <div class="theme-preview-bar" style="background: linear-gradient(135deg, #ea580c, #dc2626);">
+                        </div>
+                        <div class="theme-preview-content" style="background: #f8fafc;">
+                            <div class="theme-preview-sidebar" style="background: #ffedd5;"></div>
+                            <div class="theme-preview-main" style="background: white;">
+                                <div class="theme-preview-line" style="background: #ea580c;"></div>
+                                <div class="theme-preview-line" style="background: #94a3b8;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <h3>Sunset Orange</h3>
+                    <p>Warm and energetic</p>
+                </div>
+
+                <div class="theme-card" onclick="setTheme('purple')" data-theme-card="purple">
+                    <div class="theme-preview">
+                        <div class="theme-preview-bar" style="background: linear-gradient(135deg, #7c3aed, #db2777);">
+                        </div>
+                        <div class="theme-preview-content" style="background: #f8fafc;">
+                            <div class="theme-preview-sidebar" style="background: #ede9fe;"></div>
+                            <div class="theme-preview-main" style="background: white;">
+                                <div class="theme-preview-line" style="background: #7c3aed;"></div>
+                                <div class="theme-preview-line" style="background: #94a3b8;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <h3>Royal Purple</h3>
+                    <p>Creative and bold</p>
+                </div>
+
+                <div class="theme-card" onclick="setTheme('rose')" data-theme-card="rose">
+                    <div class="theme-preview">
+                        <div class="theme-preview-bar" style="background: linear-gradient(135deg, #e11d48, #f43f5e);">
+                        </div>
+                        <div class="theme-preview-content" style="background: #f8fafc;">
+                            <div class="theme-preview-sidebar" style="background: #ffe4e6;"></div>
+                            <div class="theme-preview-main" style="background: white;">
+                                <div class="theme-preview-line" style="background: #e11d48;"></div>
+                                <div class="theme-preview-line" style="background: #94a3b8;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <h3>Rose</h3>
+                    <p>Elegant and stylish</p>
+                </div>
+
+                <div class="theme-card" onclick="setTheme('teal')" data-theme-card="teal">
+                    <div class="theme-preview">
+                        <div class="theme-preview-bar" style="background: linear-gradient(135deg, #0d9488, #06b6d4);">
+                        </div>
+                        <div class="theme-preview-content" style="background: #f8fafc;">
+                            <div class="theme-preview-sidebar" style="background: #ccfbf1;"></div>
+                            <div class="theme-preview-main" style="background: white;">
+                                <div class="theme-preview-line" style="background: #0d9488;"></div>
+                                <div class="theme-preview-line" style="background: #94a3b8;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <h3>Teal</h3>
+                    <p>Calm and balanced</p>
+                </div>
+
+                <div class="theme-card" onclick="setTheme('dark')" data-theme-card="dark">
+                    <div class="theme-preview">
+                        <div class="theme-preview-bar" style="background: linear-gradient(135deg, #60a5fa, #a78bfa);">
+                        </div>
+                        <div class="theme-preview-content" style="background: #0f172a;">
+                            <div class="theme-preview-sidebar" style="background: #1e293b;"></div>
+                            <div class="theme-preview-main" style="background: #1e293b;">
+                                <div class="theme-preview-line" style="background: #60a5fa;"></div>
+                                <div class="theme-preview-line" style="background: #475569;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <h3>Dark Mode</h3>
+                    <p>Easy on the eyes</p>
+                </div>
+
+                <div class="theme-card" onclick="setTheme('midnight')" data-theme-card="midnight">
+                    <div class="theme-preview">
+                        <div class="theme-preview-bar" style="background: linear-gradient(135deg, #6366f1, #ec4899);">
+                        </div>
+                        <div class="theme-preview-content" style="background: #020617;">
+                            <div class="theme-preview-sidebar" style="background: #0f172a;"></div>
+                            <div class="theme-preview-main" style="background: #0f172a;">
+                                <div class="theme-preview-line" style="background: #6366f1;"></div>
+                                <div class="theme-preview-line" style="background: #334155;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <h3>Midnight</h3>
+                    <p>Deep and mysterious</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>Built with ❤️ | Portfolio Builder © 2026</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
